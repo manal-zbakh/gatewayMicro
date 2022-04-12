@@ -1,0 +1,54 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATWAY
+  cloud:
+    gateway:
+     default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+     globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+     routes:
+      - id: AUTH-SERVICE
+        uri: lb://AUTH-SERVICE
+        predicates:
+        - Path=/connexion/**
+      - id: ETHEREUM-SERVICE
+        uri: lb://ETHEREUM-SERVICE
+        predicates:
+        - Path=/ethereum/**
+      - id: USER-SERVICE
+        uri: lb://USER-SERVICE
+        predicates:
+        - Path=/user/**    
+      - id: ETUDIANTS-SERVICE
+        uri: lb://ETUDIANTS-SERVICE
+        predicates:
+        - Path=/user/**
+      - id: CLIENT-SERVICE
+        uri: lb://CLIENT-SERVICE
+        predicates:
+        - Path=/client/**
+      - id: CONTRAT-SERVICE
+        uri: lb://CONTRAT-SERVICE
+        predicates:
+        - Path=/contrat/**
+      - id: IMMOBILIER-SERVICE
+        uri: lb://IMMOBILIER-SERVICE
+        predicates:
+        - Path=/immobilier/**
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+   
